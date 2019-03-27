@@ -12,12 +12,11 @@ public class MyAutoRunApp extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
             Toast.makeText(context,"Boot completed!!",Toast.LENGTH_SHORT).show();
-            /*
-            Intent it = new Intent(context, MainActivity.class);
-            context.startActivity(it);
-            */
 
-            Intent its=new Intent(context,AlarmService.class);
+//            Intent it = new Intent(context, MainActivity.class);
+//            context.startActivity(it);
+
+            Intent its = new Intent(context,AlarmService.class);
 
             if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O) {
                 context.startForegroundService(its);

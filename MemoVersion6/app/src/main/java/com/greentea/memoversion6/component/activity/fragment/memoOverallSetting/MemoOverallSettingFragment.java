@@ -34,15 +34,12 @@ public class MemoOverallSettingFragment extends Fragment {
     Button backBtn;
     NumberPicker np1, np2;
     RelativeLayout relativeLayout;
-    Bundle bundle;
     MemoSettingData memoSettingData;
 
-    int startTime, endTime, nowStartTime, nowEndTime;
+    int nowStartTime, nowEndTime;
 
     @Inject
     MemoRepositoryDB memoRepositoryDB;
-
-    private MemoViewModel memoViewModel;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -78,6 +75,7 @@ public class MemoOverallSettingFragment extends Fragment {
             memoSettingData = new MemoSettingData();
             memoSettingData.setSleepStartTime(0);
             memoSettingData.setSleepEndTime(0);
+            memoRepositoryDB.insertSettingData(memoSettingData);
         }
         else {
             memoSettingData = memoRepositoryDB.getSettingData();
@@ -107,11 +105,12 @@ public class MemoOverallSettingFragment extends Fragment {
         memoSettingData.setSleepStartTime(np1.getValue());
         memoSettingData.setSleepEndTime(np2.getValue());
 
-        memoRepositoryDB.updateSettingDate(memoSettingData);
+        memoRepositoryDB.insertSettingData(memoSettingData);
+//        memoRepositoryDB.updateSettingDate(memoSettingData);
 
         Toast.makeText(getContext(), "updated!", Toast.LENGTH_SHORT).show();
 
-        mainActivity.OnFragmentChange(0,bundle);
+        mainActivity.OnFragmentChange(0,null);
     }
 
     @Override

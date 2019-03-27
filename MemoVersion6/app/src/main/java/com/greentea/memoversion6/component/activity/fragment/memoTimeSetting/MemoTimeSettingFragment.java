@@ -156,7 +156,7 @@ public class MemoTimeSettingFragment extends Fragment {
         clickBack();
     }
 
-    //내부저장소 저장기능
+    //memo data 저장
     public void saveData(){
 
         //현재 시간 받기
@@ -169,6 +169,7 @@ public class MemoTimeSettingFragment extends Fragment {
         MD.setMemoText(mText);
         MD.setMemoTitle(mTitle);
 
+        // 알림 빈도 설정
         np1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal){
@@ -178,14 +179,15 @@ public class MemoTimeSettingFragment extends Fragment {
         });
 
         MD.setMinTime(Integer.toString(makeInterval(interval)));
-//
-//        MD.setRandomTime(new RandomTimeMaker().Randomize(
-//                deadLine,
-//                time,
-//                Integer.parseInt(MD.getMinTime())*60 ));//수면 시작은 시간만
+
+        // 랜덤 타임 설정
+//        MD.setRandomTime(new RandomTimeMaker().Randomize(deadLine, time,Integer.parseInt(MD.getMinTime())*60 ));
+
+//        // test
+        MD.setRandomTime(new RandomTimeMaker().Randomize(deadLine, time,1));
 
 //        MD.setRandomTime("19032519131903251915");//test
-        MD.setRandomTime("19032522291903252230");//test
+//        MD.setRandomTime("1903271946");//test
 
         //년도가 너무 커지면 생성되는 랜덤사이즈가 너무 커진다.
         memoViewModel.insertMemoData(MD);
@@ -219,5 +221,4 @@ public class MemoTimeSettingFragment extends Fragment {
     public int makeInterval(int idx){
         return intervals[idx];
     }
-
 }
