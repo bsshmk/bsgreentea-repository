@@ -42,5 +42,4 @@ public class MemoViewModel extends ViewModel {
     }
 
     public void insertMemoSettingData(MemoSettingData memoSettingData) {memoRepositoryDB.insertSettingData(memoSettingData);}
-    public void updateMemoSettingData(MemoSettingData memoSettingData) {memoRepositoryDB.updateSettingDate(memoSettingData);}
 }

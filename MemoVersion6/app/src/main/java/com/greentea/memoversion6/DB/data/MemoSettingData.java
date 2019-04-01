@@ -10,7 +10,9 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "app_setting_table")
 public class MemoSettingData implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
+    public MemoSettingData(){}
+
+    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "id")
     private int id = 0;
@@ -21,6 +23,7 @@ public class MemoSettingData implements Serializable {
     @ColumnInfo(name = "sleep_end")
     private int sleepEndTime;
 
+    @NonNull
     public int getId() {
         return id;
     }

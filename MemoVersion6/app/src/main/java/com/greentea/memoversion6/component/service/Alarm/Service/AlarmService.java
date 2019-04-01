@@ -27,6 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 import dagger.android.AndroidInjection;
 
 public class AlarmService extends Service {
@@ -34,7 +35,8 @@ public class AlarmService extends Service {
     AlarmServiceThread thread;
     NotificationManager Notifi_M;
     Notification notification;
-    NotificationChannel notificationChannel, fakeChannel;
+    NotificationChannel notificationChannel;
+    NotificationCompat.Builder fakeChannel = null;
 
     private List<MemoData> memoDataList;
     SimpleDateFormat mFormat;
@@ -98,6 +100,8 @@ public class AlarmService extends Service {
     }
 
     class myServiceHandler extends Handler {
+
+
 
         public void checkNotify(MemoData memoData){
             String tempRandomTime = memoData.getRandomTime().substring(memoData.getRandomTime().length()-10);

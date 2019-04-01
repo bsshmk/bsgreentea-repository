@@ -66,34 +66,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         fragmentTransaction.replace(R.id.mainContainer, memoBodyFragment, null).commit();
-
-//        getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoBodyFragment).commit();
-    }
-    public void OnFragmentChange(int idx, Bundle bundle, FragmentTransaction fragmentTransaction){
-        if(idx == 0){
-//            getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//            fragmentTransaction.replace(R.id.mainContainer, memoBodyFragment, null);
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//            fragmentTransaction.replace(R.id.mainContainer, memoBodyFragment).commit();
-        }else if(idx == 1){
-//            fragmentTransaction.replace(R.id.mainContainer, memoAddFragment, null);
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//            fragmentTransaction.replace(R.id.mainContainer, memoAddFragment).commit();
-        }else if(idx == 2){
-//            memoTimeSettingFragment.setArguments(bundle);
-//            fragmentTransaction.replace(R.id.mainContainer, memoTimeSettingFragment, null);
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//            fragmentTransaction.replace(R.id.mainContainer, memoTimeSettingFragment).commit();
-        }else if(idx == 3){
-//            fragmentTransaction.replace(R.id.mainContainer, memoOverallSettingFragment, null);
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//            fragmentTransaction.replace(R.id.mainContainer, memoOverallSettingFragment).commit();
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoOverallSettingFragment).addToBackStack(null).commit();
-        }
     }
 
     public void startAlarmService(){
@@ -104,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         return hideKeyboard;
     }
 
-    //////////////////////
+    ////////////////////// back key
     public interface onKeyBackPressedListener{
         void onBackKey();
     }

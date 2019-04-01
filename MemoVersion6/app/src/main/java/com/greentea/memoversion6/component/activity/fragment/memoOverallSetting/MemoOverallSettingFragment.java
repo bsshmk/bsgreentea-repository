@@ -135,9 +135,9 @@ public class MemoOverallSettingFragment extends Fragment implements MainActivity
         super.onCreate(savedInstanceState);
     }
 
-    public void changeFragment(int idx){
-        mainActivity.OnFragmentChange(idx, null, getFragmentManager().beginTransaction());
-    }
+//    public void changeFragment(int idx){
+//        mainActivity.OnFragmentChange(idx, null);
+//    }
 
     private void hideKeyboard(){
         mainActivity.getHideKeyboard().hideKeyboard();

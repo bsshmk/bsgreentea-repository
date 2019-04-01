@@ -13,12 +13,9 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface MemoSettingDataDao {
 
-    @Query("SELECT * FROM app_setting_table")
+    @Query("SELECT * FROM app_setting_table WHERE id = 0")
     MemoSettingData getSettingData();
 
     @Insert(onConflict = REPLACE)
     void insertMemoSettingData(MemoSettingData memoSettingData);
-
-    @Update
-    void updateMemoSettingData(MemoSettingData memoSettingData);
 }

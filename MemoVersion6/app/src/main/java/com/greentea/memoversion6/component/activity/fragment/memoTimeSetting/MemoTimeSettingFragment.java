@@ -98,7 +98,6 @@ public class MemoTimeSettingFragment extends Fragment implements MainActivity.on
         clickHideKeyboard();
         final FragmentManager fm = ((AppCompatActivity)getActivity()).getSupportFragmentManager();
 
-        //임시,, 지우거나 빼기
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,31 +186,21 @@ public class MemoTimeSettingFragment extends Fragment implements MainActivity.on
         MD.setMinTime(Integer.toString(makeInterval(interval)));
 
         // 랜덤 타임 설정
-//        MD.setRandomTime(new RandomTimeMaker().Randomize(deadLine, time,Integer.parseInt(MD.getMinTime())*60 ));
+        MD.setRandomTime(new RandomTimeMaker().Randomize(deadLine, time,Integer.parseInt(MD.getMinTime())*60 ));
 
 //        // test
-        MD.setRandomTime(new RandomTimeMaker().Randomize(deadLine, time,1));
+//        MD.setRandomTime(new RandomTimeMaker().Randomize(deadLine, time,1));
 
 //        MD.setRandomTime("19032519131903251915");//test
-//        MD.setRandomTime("1903271946");//test
 
-        //년도가 너무 커지면 생성되는 랜덤사이즈가 너무 커진다.
         memoViewModel.insertMemoData(MD);
 
         fragmentTransaction = MainActivity.mainActivity.getSupportFragmentManager().beginTransaction();
         MainActivity.mainActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fragmentTransaction.replace(R.id.mainContainer, new MemoBodyFragment(), null);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-
-//        changeFragment(0);
     }
 
-    //프래그먼트 변환
-    public void changeFragment(int idx){
-        //디비에 저장....
-        mainActivity.OnFragmentChange(idx, null, getFragmentManager().beginTransaction());//이 페이지에서 데이터 처리하고 널을 넘기자.
-    }
     private void hideKeyboard(){
         MainActivity.mainActivity.getHideKeyboard().hideKeyboard();
     }
@@ -237,7 +226,7 @@ public class MemoTimeSettingFragment extends Fragment implements MainActivity.on
 
     @Override
     public void onBackKey() {
-        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity = (MainActivity) getActivity();
         mainActivity.setOnKeyBackPressedListener(null);
         mainActivity.onBackPressed();
     }

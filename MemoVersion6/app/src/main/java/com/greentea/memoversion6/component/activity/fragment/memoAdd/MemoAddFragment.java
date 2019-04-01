@@ -15,21 +15,17 @@ import com.greentea.memoversion6.R;
 import com.greentea.memoversion6.component.activity.MainActivity;
 import com.greentea.memoversion6.component.activity.fragment.memoTimeSetting.MemoTimeSettingFragment;
 
-import org.mozilla.javascript.tools.jsc.Main;
-
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Lifecycle;
 import dagger.android.support.AndroidSupportInjection;
 
-//import android.App.Fragment;
 
 public class MemoAddFragment extends Fragment implements MainActivity.onKeyBackPressedListener{
     Button btn, AddPagebackButton;
     EditText titleData, contentData;
     LinearLayout memoAddLayout;
     MainActivity mainActivity;
+    MemoTimeSettingFragment memoTimeSettingFragment;
 
     @Override
     public void onAttach(Context context) {
@@ -56,7 +52,7 @@ public class MemoAddFragment extends Fragment implements MainActivity.onKeyBackP
             @Override
             public void onClick(View v) {
 
-                if(titleData.getText().toString() == "" || contentData.getText().toString() == ""){
+                if(titleData.getText().toString().length() == 0 || contentData.getText().toString().length() == 0){
                     Toast.makeText(getContext(), "No title(content)!", Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -65,11 +61,11 @@ public class MemoAddFragment extends Fragment implements MainActivity.onKeyBackP
                     bundle.putString("content", contentData.getText().toString());
 
                     FragmentTransaction fragmentTransaction = MainActivity.mainActivity.getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.mainContainer, new MemoTimeSettingFragment(), null);
+                    memoTimeSettingFragment = new MemoTimeSettingFragment();
+                    memoTimeSettingFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.mainContainer, memoTimeSettingFragment, null);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
-
-//                    mainActivity.OnFragmentChange(2, bundle, getFragmentManager().beginTransaction());
                 }
             }
         });
@@ -81,8 +77,8 @@ public class MemoAddFragment extends Fragment implements MainActivity.onKeyBackP
     @Override
     public void onResume() {
         super.onResume();
-        titleData.setText("");
-        contentData.setText("");
+//        titleData.setText("");
+//        contentData.setText("");
     }
 
     public void init(View view) {
@@ -116,7 +112,7 @@ public class MemoAddFragment extends Fragment implements MainActivity.onKeyBackP
 
     @Override
     public void onBackKey() {
-        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity = (MainActivity) getActivity();
         mainActivity.setOnKeyBackPressedListener(null);
         mainActivity.onBackPressed();
     }

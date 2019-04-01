@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c0f8e6c45e6e63cc9a2dd08cc7ed44e5",
+    "identityHash": "ba129dfb978ed1c4b821d94000332a8e",
     "entities": [
       {
         "tableName": "memo_data_table",
@@ -62,7 +62,7 @@
       },
       {
         "tableName": "app_setting_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sleep_start` INTEGER NOT NULL, `sleep_end` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `sleep_start` INTEGER NOT NULL, `sleep_end` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -87,7 +87,7 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -95,7 +95,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c0f8e6c45e6e63cc9a2dd08cc7ed44e5\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ba129dfb978ed1c4b821d94000332a8e\")"
     ]
   }
 }

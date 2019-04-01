@@ -63,12 +63,12 @@ public class MemoBodyFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        ((MainActivity) context).setOnKeyBackPressedListener(null);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.configureDagger();
         this.configureViewModel();
     }
     private void configureDagger(){
@@ -86,10 +86,8 @@ public class MemoBodyFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.memo_body, container, false);
 
         init(rootView);
-
         clickSortButton();
         clickAddButton();
-
         hideKeyboard();
 
         return rootView;
@@ -98,6 +96,7 @@ public class MemoBodyFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.configureDagger();
         setHasOptionsMenu(true);
     }
 
@@ -113,7 +112,7 @@ public class MemoBodyFragment extends Fragment {
                 Toast.makeText(getContext(), "setting page", Toast.LENGTH_SHORT).show();
 //
                 fragmentTransaction = MainActivity.mainActivity.getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.mainContainer, new MemoOverallSettingFragment(), null);
+                fragmentTransaction.replace(R.id.mainContainer, new MemoOverallSettingFragment(),null);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 //                changeFragment(3);
@@ -168,13 +167,8 @@ public class MemoBodyFragment extends Fragment {
                 fragmentTransaction.replace(R.id.mainContainer, new MemoAddFragment(), null);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-//                changeFragment(1);
             }
         });
-    }
-
-    public void changeFragment(int idx) {
-        mainActivity.OnFragmentChange(idx, null, getFragmentManager().beginTransaction());
     }
 
     private void makeDialog(MainActivity mainActivity){

@@ -123,19 +123,4 @@ public class MemoRepositoryDB {
             return null;
         }
     }
-
-    public void updateSettingDate(MemoSettingData memoSettingData){
-        new updateSettingAsyncTask(memoSettingDataDao).execute(memoSettingData);
-    }
-
-    private static class updateSettingAsyncTask extends AsyncTask<MemoSettingData, Void, Void>{
-        private MemoSettingDataDao asyncSettingDao;
-        updateSettingAsyncTask(MemoSettingDataDao memoSettingDataDao){asyncSettingDao = memoSettingDataDao;}
-
-        @Override
-        protected Void doInBackground(MemoSettingData... memoSettingData){
-            asyncSettingDao.updateMemoSettingData(memoSettingData[0]);
-            return null;
-        }
-    }
 }

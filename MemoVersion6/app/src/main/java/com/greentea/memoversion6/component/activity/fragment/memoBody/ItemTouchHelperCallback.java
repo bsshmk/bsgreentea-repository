@@ -1,6 +1,8 @@
 package com.greentea.memoversion6.component.activity.fragment.memoBody;
 
 
+import android.util.Log;
+
 import com.greentea.memoversion6.DB.MemoRepositoryDB;
 import com.greentea.memoversion6.DB.data.MemoData;
 import com.greentea.memoversion6.ViewModel.MemoViewModel;
@@ -34,6 +36,8 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.SimpleCallback {
 ////        mAdapter.deleteItem(viewHolder.getAdapterPosition());
 //        MemoData memoData = mAdapter.getMemoAt(position);
 //        memoViewModel.deleteMemoData(mAdapter.getMemoAt(position));
+        if(memoRepositoryDB == null)
+            Log.d("testerror", "hi");
         memoRepositoryDB.deleteMemo(mAdapter.getItem(position));//디비에서 지우자.
 //        mAdapter.deleteItem(position);
     }//스와이프 삭제를 위한 부분
