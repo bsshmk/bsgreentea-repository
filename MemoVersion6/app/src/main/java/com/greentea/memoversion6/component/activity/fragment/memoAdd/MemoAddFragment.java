@@ -13,13 +13,19 @@ import android.widget.Toast;
 
 import com.greentea.memoversion6.R;
 import com.greentea.memoversion6.component.activity.MainActivity;
+import com.greentea.memoversion6.component.activity.fragment.memoTimeSetting.MemoTimeSettingFragment;
+
+import org.mozilla.javascript.tools.jsc.Main;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
 import dagger.android.support.AndroidSupportInjection;
 
 //import android.App.Fragment;
 
-public class MemoAddFragment extends Fragment {
+public class MemoAddFragment extends Fragment implements MainActivity.onKeyBackPressedListener{
     Button btn, AddPagebackButton;
     EditText titleData, contentData;
     LinearLayout memoAddLayout;
@@ -28,7 +34,7 @@ public class MemoAddFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mainActivity = (MainActivity)getActivity();
+        ((MainActivity) context).setOnKeyBackPressedListener(this);
     }
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -58,13 +64,25 @@ public class MemoAddFragment extends Fragment {
                     bundle.putString("title", titleData.getText().toString());
                     bundle.putString("content", contentData.getText().toString());
 
-                    mainActivity.OnFragmentChange(2, bundle);
+                    FragmentTransaction fragmentTransaction = MainActivity.mainActivity.getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.mainContainer, new MemoTimeSettingFragment(), null);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+//                    mainActivity.OnFragmentChange(2, bundle, getFragmentManager().beginTransaction());
                 }
             }
         });
         clickHideKeyboard();
         clickBack();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        titleData.setText("");
+        contentData.setText("");
     }
 
     public void init(View view) {
@@ -80,7 +98,7 @@ public class MemoAddFragment extends Fragment {
         AddPagebackButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.OnFragmentChange(0,null);
+                onBackKey();
             }
         });
     }
@@ -94,5 +112,12 @@ public class MemoAddFragment extends Fragment {
                 hideKeyboard();
             }
         });
+    }
+
+    @Override
+    public void onBackKey() {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setOnKeyBackPressedListener(null);
+        mainActivity.onBackPressed();
     }
 }

@@ -18,23 +18,30 @@ import com.greentea.memoversion6.DB.data.MemoSettingData;
 import com.greentea.memoversion6.R;
 import com.greentea.memoversion6.ViewModel.MemoViewModel;
 import com.greentea.memoversion6.component.activity.MainActivity;
+import com.greentea.memoversion6.component.activity.fragment.memoBody.MemoBodyFragment;
+
+import org.mozilla.javascript.tools.jsc.Main;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import dagger.android.support.AndroidSupportInjection;
 
-public class MemoOverallSettingFragment extends Fragment {
+public class MemoOverallSettingFragment extends Fragment implements MainActivity.onKeyBackPressedListener{
 
     MainActivity mainActivity;
     Button backBtn;
     NumberPicker np1, np2;
     RelativeLayout relativeLayout;
     MemoSettingData memoSettingData;
+
+    FragmentTransaction fragmentTransaction;
 
     int nowStartTime, nowEndTime;
 
@@ -48,6 +55,7 @@ public class MemoOverallSettingFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.memo_overall_setting, container, false);
+
         this.configureDagger();
         init(rootView);
 
@@ -81,6 +89,8 @@ public class MemoOverallSettingFragment extends Fragment {
             memoSettingData = memoRepositoryDB.getSettingData();
         }
 
+        mainActivity = (MainActivity) getActivity();
+
         relativeLayout = (RelativeLayout) viewGroup.findViewById(R.id.settingLayout2);
         backBtn = (Button) viewGroup.findViewById(R.id.settingPageBackButton);
 
@@ -106,17 +116,18 @@ public class MemoOverallSettingFragment extends Fragment {
         memoSettingData.setSleepEndTime(np2.getValue());
 
         memoRepositoryDB.insertSettingData(memoSettingData);
-//        memoRepositoryDB.updateSettingDate(memoSettingData);
 
         Toast.makeText(getContext(), "updated!", Toast.LENGTH_SHORT).show();
 
-        mainActivity.OnFragmentChange(0,null);
+        onBackKey();
+
+//        changeFragment(0);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mainActivity = (MainActivity) getActivity();
+        ((MainActivity) context).setOnKeyBackPressedListener(this);
     }
 
     @Override
@@ -124,9 +135,9 @@ public class MemoOverallSettingFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-//    public void changeFragment(int idx, ){
-//        mainActivity.OnFragmentChange(0, null);//이 페이지에서 데이터 처리하고 널을 넘기자.
-//    }
+    public void changeFragment(int idx){
+        mainActivity.OnFragmentChange(idx, null, getFragmentManager().beginTransaction());
+    }
 
     private void hideKeyboard(){
         mainActivity.getHideKeyboard().hideKeyboard();
@@ -138,5 +149,12 @@ public class MemoOverallSettingFragment extends Fragment {
                 hideKeyboard();
             }
         });
+    }
+
+    @Override
+    public void onBackKey() {
+        mainActivity = (MainActivity) getActivity();
+        mainActivity.setOnKeyBackPressedListener(null);
+        mainActivity.onBackPressed();
     }
 }

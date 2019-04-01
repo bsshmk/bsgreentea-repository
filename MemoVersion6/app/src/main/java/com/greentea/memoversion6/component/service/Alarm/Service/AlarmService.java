@@ -34,11 +34,9 @@ public class AlarmService extends Service {
     AlarmServiceThread thread;
     NotificationManager Notifi_M;
     Notification notification;
-    NotificationChannel notificationChannel;
+    NotificationChannel notificationChannel, fakeChannel;
 
     private List<MemoData> memoDataList;
-    //private MainActivity activity;
-    //private ArrayList<String> tempRandomTime;
     SimpleDateFormat mFormat;
     String time;
 
@@ -95,7 +93,7 @@ public class AlarmService extends Service {
 
     //서비스가 종료될 때 할 작업
     public void onDestroy() {
-        thread.stopForever();
+//        thread.stopForever();
         thread = null;//쓰레기 값을 만들어서 빠르게 회수하라고 null을 넣어줌.
     }
 
@@ -103,6 +101,14 @@ public class AlarmService extends Service {
 
         public void checkNotify(MemoData memoData){
             String tempRandomTime = memoData.getRandomTime().substring(memoData.getRandomTime().length()-10);
+
+            if(memoRepositoryDB.getSettingData() == null){
+                comfort_hourA = comfort_hourB = -1;
+            }
+            else{
+                comfort_hourA = memoRepositoryDB.getSettingData().getSleepStartTime();
+                comfort_hourB = memoRepositoryDB.getSettingData().getSleepEndTime();
+            }
 
             Log.d("tempRT", tempRandomTime);
             if(tempRandomTime.length() != 0){
@@ -148,6 +154,13 @@ public class AlarmService extends Service {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void handleMessage(android.os.Message msg) {
+
+//            ///?????????????
+//            notification = new Notification();
+//            startForeground(-1, notification);
+//            stopForeground(true);
+//            ///////////////
+
             Log.d("testHandler", "running");
             memoDataList = memoRepositoryDB.getStaticMemoDataList();
 
@@ -176,10 +189,10 @@ public class AlarmService extends Service {
                             .setAutoCancel(true)
                             .build();
 
-                    startForeground(-1,notification);
-                    stopForeground(true);
+//                    startForeground(-1,notification);
+//                    stopForeground(true);
 
-//                    notification.defaults = Notification.DEFAULT_SOUND;
+                    notification.defaults = Notification.DEFAULT_SOUND;
                     checkNotify(memoData);
                 }
             }else{

@@ -16,7 +16,10 @@ import com.greentea.memoversion6.DB.data.MemoData;
 import com.greentea.memoversion6.R;
 import com.greentea.memoversion6.ViewModel.MemoViewModel;
 import com.greentea.memoversion6.component.activity.MainActivity;
+import com.greentea.memoversion6.component.activity.fragment.memoBody.MemoBodyFragment;
 import com.greentea.memoversion6.component.service.Alarm.RandomTimeMaker;
+
+import org.mozilla.javascript.tools.jsc.Main;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,11 +32,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import dagger.android.support.AndroidSupportInjection;
 
-public class MemoTimeSettingFragment extends Fragment {
+public class MemoTimeSettingFragment extends Fragment implements MainActivity.onKeyBackPressedListener{
 
     MemoData MD;
     String mTitle,mText, time, deadLine;
@@ -43,6 +47,8 @@ public class MemoTimeSettingFragment extends Fragment {
     SimpleDateFormat mFormat;
 
     RelativeLayout settingLayout;
+
+    FragmentTransaction fragmentTransaction;
 
     TextView textView1;
     int interval;
@@ -65,7 +71,7 @@ public class MemoTimeSettingFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mainActivity = (MainActivity)getActivity();
+        ((MainActivity) context).setOnKeyBackPressedListener(this);
     }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -191,13 +197,20 @@ public class MemoTimeSettingFragment extends Fragment {
 
         //년도가 너무 커지면 생성되는 랜덤사이즈가 너무 커진다.
         memoViewModel.insertMemoData(MD);
-        changeFragment(0);
+
+        fragmentTransaction = MainActivity.mainActivity.getSupportFragmentManager().beginTransaction();
+        MainActivity.mainActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentTransaction.replace(R.id.mainContainer, new MemoBodyFragment(), null);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+//        changeFragment(0);
     }
 
     //프래그먼트 변환
     public void changeFragment(int idx){
         //디비에 저장....
-        mainActivity.OnFragmentChange(idx, null);//이 페이지에서 데이터 처리하고 널을 넘기자.
+        mainActivity.OnFragmentChange(idx, null, getFragmentManager().beginTransaction());//이 페이지에서 데이터 처리하고 널을 넘기자.
     }
     private void hideKeyboard(){
         MainActivity.mainActivity.getHideKeyboard().hideKeyboard();
@@ -214,11 +227,18 @@ public class MemoTimeSettingFragment extends Fragment {
         TimeSettingPageBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.OnFragmentChange(1, null);
+                onBackKey();
             }
         });
     }
     public int makeInterval(int idx){
         return intervals[idx];
+    }
+
+    @Override
+    public void onBackKey() {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setOnKeyBackPressedListener(null);
+        mainActivity.onBackPressed();
     }
 }

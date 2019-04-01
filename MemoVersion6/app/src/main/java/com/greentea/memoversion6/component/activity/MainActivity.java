@@ -2,6 +2,7 @@ package com.greentea.memoversion6.component.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.greentea.memoversion6.HideKeyboard;
 import com.greentea.memoversion6.R;
@@ -11,10 +12,14 @@ import com.greentea.memoversion6.component.activity.fragment.memoOverallSetting.
 import com.greentea.memoversion6.component.activity.fragment.memoTimeSetting.MemoTimeSettingFragment;
 import com.greentea.memoversion6.component.service.Alarm.Service.AlarmService;
 
+import java.util.Stack;
+
 import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
@@ -26,7 +31,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     MemoTimeSettingFragment memoTimeSettingFragment;//플레그먼트 주입이 될까?
     MemoOverallSettingFragment memoOverallSettingFragment;
     HideKeyboard hideKeyboard;
+    FragmentTransaction fragmentTransaction;
     public static MainActivity mainActivity;
+
+    BackPressCloseHandler backPressCloseHandler;
+
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
@@ -35,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startAlarmService();
+        backPressCloseHandler = new BackPressCloseHandler(this);
         mainActivity = this;
         init();
         this.configureDagger();
@@ -53,18 +63,36 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         memoAddFragment = new MemoAddFragment();
         memoTimeSettingFragment = new MemoTimeSettingFragment();
         memoOverallSettingFragment = new MemoOverallSettingFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoBodyFragment).commit();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+        fragmentTransaction.replace(R.id.mainContainer, memoBodyFragment, null).commit();
+
+//        getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoBodyFragment).commit();
     }
-    public void OnFragmentChange(int idx, Bundle bundle){
+    public void OnFragmentChange(int idx, Bundle bundle, FragmentTransaction fragmentTransaction){
         if(idx == 0){
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoBodyFragment).commit();
+//            getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//            fragmentTransaction.replace(R.id.mainContainer, memoBodyFragment, null);
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+//            fragmentTransaction.replace(R.id.mainContainer, memoBodyFragment).commit();
         }else if(idx == 1){
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoAddFragment).commit();
+//            fragmentTransaction.replace(R.id.mainContainer, memoAddFragment, null);
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+//            fragmentTransaction.replace(R.id.mainContainer, memoAddFragment).commit();
         }else if(idx == 2){
-            memoTimeSettingFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoTimeSettingFragment).commit();
+//            memoTimeSettingFragment.setArguments(bundle);
+//            fragmentTransaction.replace(R.id.mainContainer, memoTimeSettingFragment, null);
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+//            fragmentTransaction.replace(R.id.mainContainer, memoTimeSettingFragment).commit();
         }else if(idx == 3){
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoOverallSettingFragment).commit();
+//            fragmentTransaction.replace(R.id.mainContainer, memoOverallSettingFragment, null);
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+//            fragmentTransaction.replace(R.id.mainContainer, memoOverallSettingFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoOverallSettingFragment).addToBackStack(null).commit();
         }
     }
 
@@ -74,5 +102,28 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
     public HideKeyboard getHideKeyboard(){
         return hideKeyboard;
+    }
+
+    //////////////////////
+    public interface onKeyBackPressedListener{
+        void onBackKey();
+    }
+    private onKeyBackPressedListener mOnKeyBackPressedListener;
+    public void setOnKeyBackPressedListener(onKeyBackPressedListener listener){
+        mOnKeyBackPressedListener = listener;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mOnKeyBackPressedListener != null) {
+            mOnKeyBackPressedListener.onBackKey();
+        }else{
+            if(getSupportFragmentManager().getBackStackEntryCount() == 0){
+                backPressCloseHandler.onBackPressed();
+            }
+            else{
+                super.onBackPressed();
+            }
+        }
     }
 }

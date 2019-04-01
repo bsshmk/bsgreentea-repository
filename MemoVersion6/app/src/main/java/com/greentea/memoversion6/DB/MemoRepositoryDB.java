@@ -1,6 +1,5 @@
 package com.greentea.memoversion6.DB;
 
-
 import android.os.AsyncTask;
 
 import com.greentea.memoversion6.DB.data.MemoData;
