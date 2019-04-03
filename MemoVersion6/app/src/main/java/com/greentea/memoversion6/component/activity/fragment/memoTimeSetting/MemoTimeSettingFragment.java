@@ -189,7 +189,7 @@ public class MemoTimeSettingFragment extends Fragment implements MainActivity.on
         MD.setRandomTime(new RandomTimeMaker().Randomize(deadLine, time,Integer.parseInt(MD.getMinTime())*60 ));
 
 //        // test
-//        MD.setRandomTime(new RandomTimeMaker().Randomize(deadLine, time,1));
+        MD.setRandomTime(new RandomTimeMaker().Randomize(deadLine, time,1));
 
 //        MD.setRandomTime("19032519131903251915");//test
 

@@ -3,6 +3,7 @@ package com.greentea.memoversion6.component.service.Alarm.Service;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.greentea.memoversion6.DB.MemoRepositoryDB;
 import com.greentea.memoversion6.DB.data.MemoData;
 import com.greentea.memoversion6.R;
+import com.greentea.memoversion6.component.activity.MainActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -101,8 +103,6 @@ public class AlarmService extends Service {
 
     class myServiceHandler extends Handler {
 
-
-
         public void checkNotify(MemoData memoData){
             String tempRandomTime = memoData.getRandomTime().substring(memoData.getRandomTime().length()-10);
 
@@ -159,14 +159,12 @@ public class AlarmService extends Service {
         @Override
         public void handleMessage(android.os.Message msg) {
 
-//            ///?????????????
-//            notification = new Notification();
-//            startForeground(-1, notification);
-//            stopForeground(true);
-//            ///////////////
-
             Log.d("testHandler", "running");
             memoDataList = memoRepositoryDB.getStaticMemoDataList();
+
+            Intent intent = new Intent(AlarmService.this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(AlarmService.this, 0, intent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
@@ -191,6 +189,8 @@ public class AlarmService extends Service {
                             .setSmallIcon(R.drawable.ic_announcement_black_24dp)
                             .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.ic_event_black_24dp))
                             .setAutoCancel(true)
+                            // added
+                            .setContentIntent(pendingIntent)
                             .build();
 
 //                    startForeground(-1,notification);
@@ -207,6 +207,7 @@ public class AlarmService extends Service {
                             .setContentText(memoData.getMemoText())
                             .setTicker("알림!!!")
                             .setSmallIcon(R.drawable.ic_announcement_black_24dp)
+                            .setContentIntent(pendingIntent)
                             .build();
                     //노티파이 통일 필요...?
 
